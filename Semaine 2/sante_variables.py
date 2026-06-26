@@ -25,49 +25,49 @@ h1_ville            = 'Brazzaville'
 h1_departement      = 'Brazzaville' 
 h1_type             = 'CHU' 
 h1_nb_lits          = 320 
-h1_nb_lits_occupes  = 284 
+h1_nb_lits_occupes  = 298 
 h1_nb_medecins      = 47 
-h1_nb_infirmiers    = 123 
+h1_nb_infirmiers    = 123 #
 h1_population_zone  = 1_800_000 
 # Hopital 2 - Hopital general Pointe-Noire
 h2_nom              = 'Hopital General Pointe-Noire'
 h2_ville            = 'Pointe-Noire'
 h2_departement      = 'Pointe-Noire'
 h2_type             = 'Hopital General'
-h2_nb_lits          = 612
-h2_nb_lits_occupes  = 532
-h2_nb_medecins      = 60
-h2_nb_infirmiers    = 150
+h2_nb_lits          = 180
+h2_nb_lits_occupes  = 143
+h2_nb_medecins      = 22
+h2_nb_infirmiers    = 150 #
 h2_population_zone  = 1_123_342
 # Hopital 3 - Hopital de Dolisie
 h3_nom              = 'Hopital de Dolisie'
 h3_ville            = 'Dolisie'
 h3_departement      = 'Niari'
 h3_type             = 'Hopital'
-h3_nb_lits          = 452
-h3_nb_lits_occupes  = 345
-h3_nb_medecins      = 87
-h3_nb_infirmiers    = 34
+h3_nb_lits          = 95
+h3_nb_lits_occupes  = 91
+h3_nb_medecins      = 8
+h3_nb_infirmiers    = 34  #
 h3_population_zone  = 456_698
 # Hopital 4 - Hopital de district Owando
 h4_nom              = 'Hopital de district Owando'
 h4_ville            = 'Owando'
 h4_departement      = 'Cuvette'
 h4_type             = 'Hopital de district'
-h4_nb_lits          = 345
-h4_nb_lits_occupes  = 123
-h4_nb_medecins      = 23
-h4_nb_infirmiers    = 42 
+h4_nb_lits          = 45
+h4_nb_lits_occupes  = 32
+h4_nb_medecins      = 3
+h4_nb_infirmiers    = 42 #
 h4_population_zone  = 987_765
 # Hopital 5 - Centre de sante de Impfondo 
 h5_nom              = 'Centre de sante de Impfondo'
 h5_ville            = 'Impfondo'
 h5_departement      = 'Likouala'
 h5_type             = 'Centre de sante'
-h5_nb_lits          = 431
-h5_nb_lits_occupes  = 224
-h5_nb_medecins      = 78
-h5_nb_infirmiers    = 30
+h5_nb_lits          = 20
+h5_nb_lits_occupes  = 19
+h5_nb_medecins      = 1
+h5_nb_infirmiers    = 30  #
 h5_population_zone  = 1_000_123
 
  
