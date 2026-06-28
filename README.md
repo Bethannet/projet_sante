@@ -26,10 +26,3 @@ code, voir le tableau ci-dessous.
 ```bash
 python sante_variables.py
 ```
-
-## Mise à jour de ce README
-
-Ce fichier est mis à jour à chaque nouvelle semaine déposée sur le dépôt :
-- ajouter une ligne au tableau ci-dessus avec les sections/fichiers de la semaine
-- ajouter le nouveau script dans la structure du dépôt si un fichier est créé
-- ne jamais supprimer les lignes des semaines précédentes
