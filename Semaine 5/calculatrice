@@ -1,0 +1,83 @@
+#==========================================================
+# PROJET CALCULATRICE -- AKIENI ACADEMY
+#==========================================================
+"""
+Ce programme est une calculatrice développée en Python qui permet à l'utilisateur d'effectuer quatre opérations mathématiques principales : l'addition, la soustraction, la multiplication et la division.
+L'organisation du programme repose sur une fonction principale appelée "calculatrice()" qui contrôle le déroulement général de l'application. Cette fonction affiche le menu des opérations, récupère les choix de l'utilisateur, demande les valeurs nécessaires aux calculs, affiche les résultats et permet de répéter plusieurs calculs grâce à une boucle.
+Au-dessus de cette fonction principale, plusieurs sous-fonctions ont été créées : "addition()", "soustraction()", "multiplication()" et "division()". Ces fonctions ont chacune un rôle précis : elles réalisent uniquement le calcul correspondant et retournent le résultat à la fonction principale. Elles sont placées avant "calculatrice()" car Python doit connaître l'existence de ces fonctions avant qu'elles soient appelées dans le programme.
+Cette séparation permet d'avoir un code plus clair, mieux organisé et plus facile à modifier. La fonction principale s'occupe de la gestion de l'utilisateur, tandis que les sous-fonctions s'occupent uniquement des opérations mathématiques.
+Plusieurs situations pouvant provoquer des erreurs ont également été prises en compte. Le programme vérifie d'abord que le choix de l'opération est valide afin d'éviter que l'utilisateur sélectionne une option inexistante. Il gère également le cas particulier de la division par zéro, qui est une opération impossible en mathématiques. Enfin, une vérification de la réponse de l'utilisateur lors de la question de continuation permet de s'assurer qu'il répond uniquement par "oui" ou "non".
+La gestion des erreurs a été réalisée uniquement avec les notions déjà étudiées (conditions, boucles et fonctions), sans utiliser les exceptions Python ("try/except"), car cette notion n'a pas encore été abordée.
+"""
+# Fonction d'addition
+def addition(a, b):
+    return a + b
+
+# Fonction de soustraction
+def soustraction(a, b):
+    return a - b
+
+# Fonction de multiplication
+def multiplication(a, b):
+    return a * b
+
+# Fonction de division
+def division(a, b):
+    if b == 0:
+        return "Erreur : impossible de diviser par zéro."
+    return a / b
+
+# Fonction principale
+def calculatrice():
+    print("====== CALCULATRICE ======")
+    
+# Boucle qui permet de refaire plusieurs calculs
+    while True:
+        print("\nChoisissez une opération :")
+        print("1 - Addition")
+        print("2 - Soustraction")
+        print("3 - Multiplication")
+        print("4 - Division")
+        
+# Choix de l'utilisateur d'après ce qui a été proposé        
+        choix = input("Votre choix : ")
+        
+# Vérification du choix de l'utilisateur s'il est valide ou non
+        if choix != "1" and choix != "2" and choix != "3" and choix != "4":
+            print("Choix invalide.")
+            
+# Saisie des deux nombres
+        else:
+            a = float(input("Premier nombre : "))
+            b = float(input("Deuxième nombre : "))
+            
+# Exécution de l'opération choisie
+            if choix == "1":
+                resultat = addition(a, b)
+
+            elif choix == "2":
+                resultat = soustraction(a, b)
+
+            elif choix == "3":
+                resultat = multiplication(a, b)
+
+            else:
+                resultat = division(a, b)
+                
+# Affichage du résultat
+            print("Résultat :", resultat)
+            
+# Demande à l'utilisateur s'il veut continuer ou pas, avec vérification de la réponse
+        continuer = input("\nVoulez-vous effectuer un autre calcul ? (oui/non) : ").lower()
+        if continuer == "oui":
+            continue
+        elif continuer == "non":
+            break
+        else:
+            print("Réponse invalide. Veuillez répondre uniquement par oui ou non.")
+            break
+# Message de fin du programme
+    print("Merci d'avoir utilisé la calculatrice !")
+
+# Lancement du programme
+calculatrice()
