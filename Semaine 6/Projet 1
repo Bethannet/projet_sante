@@ -1,0 +1,230 @@
+"""
+PROJET 1 : Gestionnaire de notes d'étudiants
+
+Objectif :
+    Créer un programme qui gère les notes d'une classe d'étudiants,
+    calcule leurs moyennes et détermine leur mention/statut de réussite.
+
+Fonctionnement :
+    - Une liste fixe de matières de Terminale A est définie à l'avance
+      (Français, Philosophie, Histoire-Géographie, Anglais, Espagnol,
+      Mathématiques, EPS).
+    - L'utilisateur saisit le nombre d'étudiants, puis pour chacun son
+      nom et une note pour chaque matière de cette liste.
+    - Chaque étudiant est représenté par un dictionnaire contenant
+      son nom et un dictionnaire de notes {matière : note}.
+    - Tous les étudiants sont regroupés dans une liste
+      (une liste de dictionnaires).
+    - Le programme calcule automatiquement :
+        * la moyenne de chaque étudiant,
+        * sa mention (Insuffisant, Passable, Assez bien, Bien, Très bien),
+        * s'il est admis ou non (moyenne >= 10),
+        * la moyenne générale de toute la classe.
+    - Il affiche un bulletin complet pour chaque étudiant, puis un
+      bilan global de la classe.
+    - Les erreurs de saisie (nom vide ou contenant des chiffres, texte
+      au lieu d'un nombre, note hors de l'intervalle 0-20, nombre
+      d'étudiants invalide) sont gérées et redemandées à l'utilisateur.
+
+Notions utilisées : variables, types, opérateurs, conditions/branchements,
+boucles, fonctions, structures de données (listes et dictionnaires)
+"""
+
+# ---------------------------------------------------------
+# FONCTIONS
+# ---------------------------------------------------------
+
+def calculer_moyenne(notes):
+    """Calcule la moyenne des notes d'un étudiant (structure de données : dictionnaire {matière: note}).
+    Gère l'erreur de division par zéro si le dictionnaire de notes est vide."""
+    try:
+        total = 0  # variable, type int
+        for matiere in notes:  # boucle for sur les clés du dictionnaire
+            total = total + notes[matiere]  # opérateur arithmétique
+        moyenne = total / len(notes)  # opérateur arithmétique
+        return moyenne
+    except ZeroDivisionError:
+        print("Erreur : impossible de calculer une moyenne sans notes.")
+        return 0
+
+
+def obtenir_mention(moyenne):
+    """Retourne une mention selon la moyenne (conditions/branchements)."""
+    if moyenne >= 16:
+        mention = "Très bien"
+    elif moyenne >= 14:
+        mention = "Bien"
+    elif moyenne >= 12:
+        mention = "Assez bien"
+    elif moyenne >= 10:
+        mention = "Passable"
+    else:
+        mention = "Insuffisant"
+    return mention
+
+
+def etudiant_est_admis(moyenne):
+    """Retourne un booléen : True si admis, False sinon."""
+    admis = moyenne >= 10  # opérateur de comparaison -> type bool
+    return admis
+
+
+def afficher_bulletin(etudiant):
+    """Affiche le bulletin d'un étudiant (structure de données : dictionnaire)."""
+    nom = etudiant["nom"]
+    notes = etudiant["notes"]
+    moyenne = calculer_moyenne(notes)
+    mention = obtenir_mention(moyenne)
+    admis = etudiant_est_admis(moyenne)
+    
+    
+    print("Étudiant :", nom)
+    print("Notes par matière :")
+    for matiere in notes:  # boucle for sur le dictionnaire des notes
+        print("   -", matiere, ":", notes[matiere])
+    print("Moyenne :", round(moyenne, 2))
+    print("Mention :", mention)
+
+    # condition + opérateur logique
+    if admis and moyenne >= 12:
+        print("Statut : Admis avec de bons résultats")
+    elif admis:
+        print("Statut : Admis")
+    else:
+        print("Statut : Non admis")
+    
+
+def saisir_etudiant(matieres):
+    """Demande à l'utilisateur le nom et une note par matière, puis retourne un dictionnaire.
+    Gère les erreurs de saisie (nom vide ou invalide, texte au lieu d'un nombre,
+    note hors de l'intervalle 0-20)."""
+
+    nom_valide = False  # variable, type bool
+    nom = ""
+    while not nom_valide:  # boucle while : on redemande tant que le nom n'est pas correct
+        nom = input("Nom de l'étudiant : ")  # type str
+        nom = nom.strip()  # supprime les espaces inutiles au début/à la fin
+
+        if nom == "":  # condition : nom vide
+            print("Erreur : le nom ne peut pas être vide.")
+        elif not nom.replace(" ", "").isalpha():  # condition : présence de chiffres/symboles
+            print("Erreur : le nom ne doit contenir que des lettres.")
+        else:
+            nom_valide = True
+
+    notes = {}  # structure de données : dictionnaire vide {matière: note}
+    for matiere in matieres:  # boucle for sur la liste des matières
+        note_valide = False  # variable, type bool
+        while not note_valide:  # boucle while : on redemande tant que la note n'est pas correcte
+            try:
+                note = float(input(f"Note en {matiere} (entre 0 et 20) : "))  # conversion str -> float
+                if note < 0 or note > 20:  # condition sur l'intervalle autorisé
+                    print("Erreur : la note doit être comprise entre 0 et 20.")
+                else:
+                    notes[matiere] = note
+                    note_valide = True
+            except ValueError:
+                print("Erreur : veuillez entrer un nombre valide.")
+
+    etudiant = {"nom": nom, "notes": notes}  # structure de données : dictionnaire
+    return etudiant
+
+
+def saisir_classe(matieres):
+    """Demande à l'utilisateur de saisir tous les étudiants de la classe.
+    Gère les erreurs de saisie si le nombre d'étudiants n'est pas un entier valide."""
+    nombre_valide = False  # variable, type bool
+    nombre_etudiants = 0
+
+    while not nombre_valide:  # boucle while : on redemande tant que la valeur n'est pas correcte
+        try:
+            nombre_etudiants = int(input("Combien d'étudiants dans la classe ? "))
+            if nombre_etudiants <= 0:  # condition sur la valeur saisie
+                print("Erreur : le nombre d'étudiants doit être supérieur à 0.")
+            else:
+                nombre_valide = True
+        except ValueError:
+            print("Erreur : veuillez entrer un nombre entier valide.")
+
+    classe = []  # structure de données : liste
+    for i in range(nombre_etudiants):  # boucle for
+        print(f"\n--- Étudiant {i + 1} ---")
+        etudiant = saisir_etudiant(matieres)
+        classe.append(etudiant)
+
+    return classe
+
+
+def calculer_moyenne_generale(classe):
+    """Calcule la moyenne générale de toute la classe (liste de dictionnaires).
+    Gère l'erreur de division par zéro si la classe est vide."""
+    try:
+        total_moyennes = 0
+        for etudiant in classe:  # boucle sur une liste de dictionnaires
+            total_moyennes += calculer_moyenne(etudiant["notes"])  # opérateur +=
+        moyenne_generale = total_moyennes / len(classe)
+        return moyenne_generale
+    except ZeroDivisionError:
+        print("Erreur : impossible de calculer une moyenne générale sans étudiant.")
+        return 0
+
+
+# ---------------------------------------------------------
+# PROGRAMME PRINCIPAL
+# ---------------------------------------------------------
+
+# Variables et types de base
+nom_classe = "Terminale A"        # type str
+seuil_reussite = 10.0              # type float
+classe_active = True               # type bool
+
+# Structure de données : liste des matières possibles en Terminale A
+matieres = [
+    "Français",
+    "Philosophie",
+    "Histoire-Géographie",
+    "Anglais",
+    "Espagnol",
+    "Mathématiques",
+    "EPS",
+]
+nombre_matieres = len(matieres)    # type int, déduit de la liste des matières
+
+# Structure de données : liste de dictionnaires, remplie via la saisie utilisateur
+print("********************************************")
+print("=== Saisie des informations de la classe ===")
+print("Matières de", nom_classe, ":", matieres)
+print()
+classe = saisir_classe(matieres)
+print("********************************************")
+print("Classe :", nom_classe)
+print("Nombre de matières :", nombre_matieres)
+print("Seuil de réussite :", seuil_reussite)
+print("*******************************************")
+
+# Boucle for sur la liste des étudiants
+for etudiant in classe:
+    afficher_bulletin(etudiant)
+
+# Boucle while : compteur d'étudiants admis
+i = 0
+nombre_admis = 0
+while i < len(classe):
+    moyenne = calculer_moyenne(classe[i]["notes"])
+    if etudiant_est_admis(moyenne):
+        nombre_admis += 1
+    i += 1  # opérateur d'incrémentation
+print('************************************')
+print("=== Bilan global de la classe ===")
+print('************************************')
+print("Nombre d'étudiants admis :", nombre_admis, "sur", len(classe))
+
+moyenne_generale = calculer_moyenne_generale(classe)
+print("Moyenne générale de la classe :", round(moyenne_generale, 2))
+
+# Condition finale sur la classe entière
+if classe_active and moyenne_generale >= seuil_reussite:
+    print("Bilan : la classe a un bon niveau général.")
+else:
+    print("Bilan : la classe doit fournir plus d'efforts.")
+print('************************************')

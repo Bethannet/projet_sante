@@ -1,0 +1,177 @@
+"""
+PROJET 2 : Analyse d'une liste de nombres
+
+Objectif :
+    Parcourir une liste de nombres et en extraire des informations
+    simples (parité, signe, somme, moyenne, min, max).
+
+Fonctionnement :
+    - L'utilisateur saisit lui-même la quantité de nombres, puis
+      chaque nombre un par un.
+    - Pour chaque nombre, le programme détermine s'il est pair/impair
+      et positif/négatif/nul.
+    - Des fonctions calculent la somme, la moyenne, le maximum et
+      le minimum.
+    - Une boucle while compte combien de nombres pairs sont présents.
+    - Une condition finale indique si la moyenne globale est
+      positive ou non.
+    - Les erreurs de saisie (texte au lieu d'un nombre, quantité
+      invalide) sont gérées et redemandées à l'utilisateur.
+
+Notions utilisées : variables, types, opérateurs, conditions/branchements,
+boucles, fonctions, structures de données (liste)
+"""
+# ---------------------------------------------------------
+# FONCTIONS
+# ---------------------------------------------------------
+
+def est_pair(nombre):
+    """Retourne True si le nombre est pair, False sinon."""
+    # Un nombre est pair si le reste de sa division par 2 vaut 0.
+    # Cela fonctionne aussi bien avec les entiers qu'avec les floats
+    # (ex : 4.0 % 2 == 0 -> True) et avec les nombres négatifs.
+    return nombre % 2 == 0  # opérateur modulo + opérateur de comparaison
+
+
+def calculer_somme(nombres):
+    """Calcule la somme des nombres d'une liste."""
+    somme = 0  # accumulateur initialisé à 0 avant la boucle
+    for nombre in nombres:  # boucle for : on parcourt chaque élément de la liste
+        somme += nombre     # opérateur += : équivaut à somme = somme + nombre
+    return somme
+
+
+def calculer_moyenne(nombres):
+    """Calcule la moyenne d'une liste de nombres."""
+    # La moyenne = somme totale divisée par le nombre d'éléments.
+    # On réutilise calculer_somme() plutôt que de recalculer la somme ici,
+    # ce qui évite de dupliquer la logique (principe DRY).
+    return calculer_somme(nombres) / len(nombres)
+
+
+def trouver_maximum(nombres):
+    """Trouve le plus grand nombre de la liste."""
+    maximum = nombres[0]  # on part du premier élément comme hypothèse de départ
+    for nombre in nombres:
+        if nombre > maximum:  # condition : si on trouve mieux, on met à jour
+            maximum = nombre
+    return maximum
+
+
+def trouver_minimum(nombres):
+    """Trouve le plus petit nombre de la liste."""
+    minimum = nombres[0]  # on part du premier élément comme hypothèse de départ
+    for nombre in nombres:
+        if nombre < minimum:  # condition : si on trouve plus petit, on met à jour
+            minimum = nombre
+    return minimum
+
+
+def categoriser_nombre(nombre):
+    """Retourne une catégorie selon le signe et la parité du nombre."""
+    # On teste les conditions dans un ordre précis avec if / elif / else,
+    # de la plus spécifique à la plus générale, pour éviter les ambiguïtés.
+    if nombre > 0 and est_pair(nombre):        # opérateur logique 'and'
+        categorie = "positif et pair"
+    elif nombre > 0 and not est_pair(nombre):  # opérateur logique 'not'
+        categorie = "positif et impair"
+    elif nombre < 0:
+        categorie = "négatif"
+    else:
+        # Ce cas ne peut être atteint que si nombre == 0,
+        # puisque toutes les autres possibilités ont déjà été couvertes au-dessus.
+        categorie = "nul"
+    return categorie
+
+
+def saisir_nombres():
+    """Demande à l'utilisateur de saisir sa propre liste de nombres.
+    Gère les erreurs de saisie (nombre invalide, quantité invalide)."""
+
+    # --- Étape 1 : demander combien de nombres l'utilisateur veut saisir ---
+    quantite_valide = False  # variable, type bool : sert de "verrou" pour la boucle while
+    quantite = 0
+    while not quantite_valide:  # boucle while : on redemande tant que la valeur n'est pas correcte
+        try:
+            # input() renvoie toujours une chaîne de caractères (str),
+            # on la convertit donc en entier avec int().
+            quantite = int(input("Combien de nombres voulez-vous saisir ? "))
+            if quantite <= 0:  # condition sur la valeur saisie : on refuse 0 ou négatif
+                print("Erreur : la quantité doit être supérieure à 0.")
+            else:
+                quantite_valide = True  # on sort de la boucle while au prochain tour
+        except ValueError:
+            # int() lève une ValueError si le texte saisi n'est pas un entier valide
+            # (ex : l'utilisateur tape "abc" au lieu d'un nombre).
+            print("Erreur : veuillez entrer un nombre entier valide.")
+
+    # --- Étape 2 : demander chacun des nombres un par un ---
+    nombres = []  # structure de données : liste vide, qu'on va remplir progressivement
+    i = 0
+    while i < quantite:  # boucle while : on continue tant qu'on n'a pas atteint la quantité voulue
+        try:
+            valeur = float(input(f"Nombre {i + 1} : "))  # conversion str -> float
+            nombres.append(valeur)  # on ajoute la valeur validée à la liste
+            i += 1  # opérateur d'incrémentation : on ne l'incrémente qu'en cas de succès
+        except ValueError:
+            # Si la conversion échoue, on ne fait PAS i += 1,
+            # ce qui permet de redemander la même saisie sans sauter un numéro.
+            print("Erreur : veuillez entrer un nombre valide (ex : 12 ou -3.5).")
+
+    return nombres
+
+
+# ---------------------------------------------------------
+# PROGRAMME PRINCIPAL
+# ---------------------------------------------------------
+
+# Variables et types de base
+titre = "Analyse d'une liste de nombres"   # type str
+seuil_positif = 0                           # type int : valeur de référence pour le bilan final
+
+# Structure de données : liste, remplie via la saisie utilisateur
+print(titre)
+print()
+nombres = saisir_nombres()  # on récupère la liste construite par l'utilisateur
+print("=======================================")
+print("RECAPITULATIF DE LA LISTE :")
+print("======================================")
+print("Liste de nombres :", nombres)
+
+
+# Boucle for : parcours et affichage de chaque nombre avec sa catégorie
+for nombre in nombres:
+    categorie = categoriser_nombre(nombre)
+    print(f"{nombre} -> {categorie}")
+
+print("=======================================")
+
+# Calculs via les fonctions définies plus haut
+somme = calculer_somme(nombres)
+moyenne = calculer_moyenne(nombres)
+maximum = trouver_maximum(nombres)
+minimum = trouver_minimum(nombres)
+
+print("Somme :", somme)
+print("Moyenne :", round(moyenne, 2))  # round(x, 2) : arrondi à 2 décimales pour un affichage propre
+print("Maximum :", maximum)
+print("Minimum :", minimum)
+print("=======================================")
+
+# Boucle while : compter les nombres pairs dans la liste
+# (alternative à une boucle for, ici avec un compteur i manuel)
+i = 0
+nombre_de_pairs = 0
+while i < len(nombres):
+    if est_pair(nombres[i]):  # accès à l'élément par son index i
+        nombre_de_pairs += 1
+    i += 1  # opérateur d'incrémentation : indispensable pour éviter une boucle infinie
+
+print("Nombre de nombres pairs :", nombre_de_pairs)
+
+# Condition finale sur la moyenne : message de conclusion selon le résultat
+if moyenne > seuil_positif:
+    print("Bilan : la moyenne de la liste est positive.")
+else:
+    print("Bilan : la moyenne de la liste est négative ou nulle.")
+print("============================================")
